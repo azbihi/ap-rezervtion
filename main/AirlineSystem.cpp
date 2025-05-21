@@ -4,9 +4,9 @@
 #include <iostream>
 
 AirlineSystem::AirlineSystem() : nextPassengerId(1), nextFlightId(1), nextReservationId(1) {
-//    loadPassengers();
-//    loadFlights();
-//    loadReservations();
+    loadPassengers();
+    loadFlights();
+    loadReservations();
 }
 
 // Passenger Management
@@ -127,77 +127,74 @@ void AirlineSystem::cancelReservation(int reservationId) {
 
 // File Operations
 
-//void AirlineSystem::loadPassengers() {
-//    std::ifstream file("passengers.txt");
-//    if (!file.is_open()) return;
-//
-//    std::string line;
-//    while (getline(file, line)) {
-//        Passenger p = Passenger::fromCSV(line);
-//        passengers.push_back(p);
-//        if (p.getPassengerId() >= nextPassengerId) {
-//            nextPassengerId = p.getPassengerId() + 1;
-//        }
-//    }
-//    file.close();
-//}
+void AirlineSystem::loadPassengers() {
+    std::ifstream file("passengers.csv");
+    if (!file.is_open()) return;
+    std::string line;
+    while (getline(file, line)) {
+        Passenger p = Passenger::fromCSV(line);
+        passengers.push_back(p);
+        if (p.getPassengerId() >= nextPassengerId) {
+            nextPassengerId = p.getPassengerId() + 1;
+        }
+    }
+    file.close();
+}
 
-//void AirlineSystem::savePassengers() {
-//    std::ofstream file("passengers.txt");
-//    for (const auto& p : passengers) {
-//        file << p.toCSV() << "\n";
-//    }
-//    file.close();
-//}
+void AirlineSystem::savePassengers() {
+    std::ofstream file("passengers.csv");
+    for (const auto& p : passengers) {
+        file << p.toCSV() << "\n";
+    }
+    file.close();
+}
 
-//void AirlineSystem::loadFlights() {
-//    std::ifstream file("flights.txt");
-//    if (!file.is_open()) return;
-//
-//    std::string line;
-//    while (getline(file, line)) {
-//        Flight f = Flight::fromCSV(line);
-//        flights.push_back(f);
-//        if (f.getFlightId() >= nextFlightId) {
-//            nextFlightId = f.getFlightId() + 1;
-//        }
-//    }
-//    file.close();
-//}
-//
-//void AirlineSystem::saveFlights() {
-//    std::ofstream file("flights.txt");
-//    for (const auto& f : flights) {
-//        file << f.toCSV() << "\n";
-//    }
-//    file.close();
-//}
+void AirlineSystem::loadFlights() {
+    std::ifstream file("flights.csv");
+    if (!file.is_open()) return;
+    std::string line;
+    while (getline(file, line)) {
+        Flight f = Flight::fromCSV(line);
+        flights.push_back(f);
+        if (f.getFlightId() >= nextFlightId) {
+            nextFlightId = f.getFlightId() + 1;
+        }
+    }
+    file.close();
+}
 
-//void AirlineSystem::loadReservations() {
-//    std::ifstream file("reservations.txt");
-//    if (!file.is_open()) return;
-//
-//    std::string line;
-//    while (getline(file, line)) {
-//        Reservation r = Reservation::fromCSV(line);
-//        reservations.push_back(r);
-//        if (r.getReservationId() >= nextReservationId) {
-//            nextReservationId = r.getReservationId() + 1;
-//        }
-//    }
-//    file.close();
-//}
-//
-//void AirlineSystem::saveReservations() {
-//    std::ofstream file("reservations.txt");
-//    for (const auto& r : reservations) {
-//        file << r.toCSV() << "\n";
-//    }
-//    file.close();
-//}
-//
-//void AirlineSystem::saveAll() {
-//    savePassengers();
-//    saveFlights();
-//    saveReservations();
-//}
+void AirlineSystem::saveFlights() {
+    std::ofstream file("flights.csv");
+    for (const auto& f : flights) {
+        file << f.toCSV() << "\n";
+    }
+    file.close();
+}
+
+void AirlineSystem::loadReservations() {
+    std::ifstream file("reservations.csv");
+    if (!file.is_open()) return;
+    std::string line;
+    while (getline(file, line)) {
+        Reservation r = Reservation::fromCSV(line);
+        reservations.push_back(r);
+        if (r.getReservationId() >= nextReservationId) {
+            nextReservationId = r.getReservationId() + 1;
+        }
+    }
+    file.close();
+}
+
+void AirlineSystem::saveReservations() {
+    std::ofstream file("reservations.csv");
+    for (const auto& r : reservations) {
+        file << r.toCSV() << "\n";
+    }
+    file.close();
+}
+
+void AirlineSystem::saveAll() {
+    savePassengers();
+    saveFlights();
+    saveReservations();
+}

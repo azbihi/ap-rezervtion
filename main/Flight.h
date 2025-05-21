@@ -33,6 +33,8 @@ public:
 
     void decreaseSeat();
 
+    static Flight fromCSV(const std::string& line);
+    std::string toCSV() const;
 };
 
 #endif

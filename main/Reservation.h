@@ -22,6 +22,9 @@ public:
     bool isCanceled() const;
 
     void cancel();
+
+    static Reservation fromCSV(const std::string& line);
+    std::string toCSV() const;
 };
 
 #endif
