@@ -1,8 +1,24 @@
 #include <iostream>
 #include "AirlineSystem.h"
+#include <csignal>
+
+AirlineSystem* globalSystem = nullptr;
+
+void signalHandler(int signum) {
+    if (globalSystem) {
+        globalSystem->saveAll();
+    }
+    std::cout << "\nData saved. Exiting due to signal " << signum << ".\n";
+    exit(signum);
+}
 
 int main() {
     AirlineSystem system;
+    globalSystem = &system;
+
+    std::signal(SIGINT, signalHandler);
+    std::signal(SIGTERM, signalHandler);
+
     int choice;
 
     while (true) {
@@ -77,7 +93,7 @@ int main() {
             system.cancelReservation(reservationId);
         }
         else if (choice == 8) {
-//            system.saveAll();
+            system.saveAll();
             std::cout << "Goodbye!\n";
             break;
         }
@@ -86,5 +102,6 @@ int main() {
         }
     }
 
+    system.saveAll();
     return 0;
 }

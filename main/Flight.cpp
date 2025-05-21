@@ -1,5 +1,5 @@
 #include "Flight.h"
-
+#include <sstream>
 
 Flight::Flight() : flight_id(0), available_seats(0), price(0.0), is_deleted(false) {}
 
@@ -21,5 +21,26 @@ void Flight::markDeleted() { is_deleted = true; }
 
 void Flight::decreaseSeat() {
     if (available_seats > 0) available_seats--;
+}
+
+Flight Flight::fromCSV(const std::string& line) {
+    std::stringstream ss(line);
+    std::string token;
+    Flight f;
+    getline(ss, token, ','); f.flight_id = std::stoi(token);
+    getline(ss, f.flight_number, ',');
+    getline(ss, f.origin, ',');
+    getline(ss, f.destination, ',');
+    getline(ss, f.datetime, ',');
+    getline(ss, token, ','); f.available_seats = std::stoi(token);
+    getline(ss, token, ','); f.price = std::stod(token);
+    getline(ss, token, ','); f.is_deleted = (token == "1");
+    return f;
+}
+
+std::string Flight::toCSV() const {
+    std::stringstream ss;
+    ss << flight_id << "," << flight_number << "," << origin << "," << destination << "," << datetime << "," << available_seats << "," << price << "," << (is_deleted ? "1" : "0");
+    return ss.str();
 }
 

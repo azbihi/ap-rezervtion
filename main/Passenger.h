@@ -32,6 +32,8 @@ public:
     void setWalletBalance(double balance);
     void markDeleted();
 
+    static Passenger fromCSV(const std::string& line);
+    std::string toCSV() const;
 };
 
 #endif

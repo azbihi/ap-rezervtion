@@ -14,3 +14,21 @@ bool Reservation::isCanceled() const { return is_canceled; }
 
 void Reservation::cancel() { is_canceled = true; }
 
+Reservation Reservation::fromCSV(const std::string& line) {
+    std::stringstream ss(line);
+    std::string token;
+    Reservation r;
+    getline(ss, token, ','); r.reservation_id = std::stoi(token);
+    getline(ss, token, ','); r.passenger_id = std::stoi(token);
+    getline(ss, token, ','); r.flight_id = std::stoi(token);
+    getline(ss, token, ','); r.amount_paid = std::stod(token);
+    getline(ss, token, ','); r.is_canceled = (token == "1");
+    return r;
+}
+
+std::string Reservation::toCSV() const {
+    std::stringstream ss;
+    ss << reservation_id << "," << passenger_id << "," << flight_id << "," << amount_paid << "," << (is_canceled ? "1" : "0");
+    return ss.str();
+}
+
