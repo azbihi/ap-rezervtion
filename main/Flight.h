@@ -1,7 +1,6 @@
-#ifndef FLIGHT_H
-#define FLIGHT_H
-
+#pragma once
 #include <string>
+#include <ctime>
 
 class Flight {
 private:
@@ -9,32 +8,32 @@ private:
     std::string flight_number;
     std::string origin;
     std::string destination;
-    std::string datetime;
+    time_t departure_time;
     int available_seats;
-    double price;
+    double ticket_price;
     bool is_deleted;
 
 public:
-    Flight();
-    Flight(int id, const std::string& number, const std::string& origin, const std::string& destination, const std::string& datetime, int seats, double price);
+    Flight(const std::string& flight_number, const std::string& origin,
+           const std::string& destination, time_t departure_time,
+           int available_seats, double ticket_price);
 
-    int getFlightId() const;
-    std::string getFlightNumber() const;
-    std::string getOrigin() const;
-    std::string getDestination() const;
-    std::string getDatetime() const;
-    int getAvailableSeats() const;
-    double getPrice() const;
-    bool isDeleted() const;
+    // Getters
+    int getFlightId() const { return flight_id; }
+    std::string getFlightNumber() const { return flight_number; }
+    std::string getOrigin() const { return origin; }
+    std::string getDestination() const { return destination; }
+    time_t getDepartureTime() const { return departure_time; }
+    int getAvailableSeats() const { return available_seats; }
+    double getTicketPrice() const { return ticket_price; }
+    bool isDeleted() const { return is_deleted; }
 
-    void setAvailableSeats(int seats);
-    void setPrice(double price);
-    void markDeleted();
+    // Operations
+    bool reserveSeat();
+    bool cancelSeat();
+    void softDelete() { is_deleted = true; }
 
-    void decreaseSeat();
-
-    static Flight fromCSV(const std::string& line);
+    // For file operations
     std::string toCSV() const;
+    static Flight fromCSV(const std::string& csv_line);
 };
-
-#endif
