@@ -1,7 +1,6 @@
-#ifndef RESERVATION_H
-#define RESERVATION_H
-
+#pragma once
 #include <string>
+#include <ctime>
 
 class Reservation {
 private:
@@ -9,22 +8,33 @@ private:
     int passenger_id;
     int flight_id;
     double amount_paid;
-    bool is_canceled;
+    time_t reservation_time;
+    time_t flight_departure_time; // Add this field
+    bool is_cancelled;
+    bool is_deleted;
 
 public:
-    Reservation();
-    Reservation(int id, int passengerId, int flightId, double amount);
+    Reservation(int passenger_id, int flight_id, double amount_paid);
 
-    int getReservationId() const;
-    int getPassengerId() const;
-    int getFlightId() const;
-    double getAmountPaid() const;
-    bool isCanceled() const;
+    // Getters
+    int getReservationId() const { return reservation_id; }
+    int getPassengerId() const { return passenger_id; }
+    int getFlightId() const { return flight_id; }
+    double getAmountPaid() const { return amount_paid; }
+    time_t getReservationTime() const { return reservation_time; }
+    time_t getFlightDepartureTime() const { return flight_departure_time; } // Add this method
+    bool isCancelled() const { return is_cancelled; }
+    bool isDeleted() const { return is_deleted; }
 
-    void cancel();
+    // Setters
+    void setFlightDepartureTime(time_t time) { flight_departure_time = time; } // Add this method
 
-    static Reservation fromCSV(const std::string& line);
+    // Operations
+    double calculateRefundAmount(time_t current_time) const;
+    void cancel() { is_cancelled = true; }
+    void softDelete() { is_deleted = true; }
+
+    // For file operations
     std::string toCSV() const;
+    static Reservation fromCSV(const std::string& csv_line);
 };
-
-#endif
