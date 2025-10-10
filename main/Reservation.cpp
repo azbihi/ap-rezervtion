@@ -32,21 +32,25 @@ Reservation::Reservation(int passenger_id, int flight_id, double amount_paid) {
 }
 
 double Reservation::calculateRefundAmount(time_t current_time) const {
-    if (current_time > flight_departure_time) {
+    // Calculate hours before flight
+    double hours_before_flight = difftime(flight_departure_time, current_time) / 3600.0;
+
+    if (hours_before_flight < 0) {
         throw FlightCompletedException();
     }
 
-    time_t time_diff = flight_departure_time - current_time;
-    const int HOURS_48 = 48 * 60 * 60;
-    const int HOURS_24 = 24 * 60 * 60;
-    
-    if (time_diff > HOURS_48) {
-        return amount_paid * 0.9; // 90% refund if more than 48 hours
-    } else if (time_diff > HOURS_24) {
-        return amount_paid * 0.5; // 50% refund if between 24 and 48 hours
+    // More than 48 hours - 90% refund
+    if (hours_before_flight >= 48) {
+        return amount_paid * 0.9;
     }
-    
-    throw RefundNotAllowedException(); // Less than 24 hours, no refund
+    // Between 24 and 48 hours - 50% refund
+    else if (hours_before_flight >= 24) {
+        return amount_paid * 0.5;
+    }
+    // Less than 24 hours - no refund
+    else {
+        throw RefundNotAllowedException();
+    }
 }
 
 std::string Reservation::toCSV() const {

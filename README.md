@@ -13,16 +13,20 @@
 - کتابخانه Catch2 (برای اجرای تست‌ها)
 - سیستم‌عامل Windows یا Linux
 
+## برای راحتی کار فایل .exe قرار داده شده
+
 ## نصب و راه‌اندازی
+
+
 1. کلون کردن مخزن:
 ```bash
-https://github.com/azbihi/ap-rezervtion.git
+git clone https://github.com/username/airline-system.git
 cd airline-system
 ```
 
 2. کامپایل پروژه:
 ```bash
-make
+g++ -o airline_system.exe main.cpp AirlineSystem.cpp FileManager.cpp Passenger.cpp Flight.cpp Reservation.cpp InputValidator.cpp -std=c++17
 ```
 
 3. اجرای برنامه:
@@ -142,7 +146,10 @@ make test
 - لاگ خطاها در کنسول
 - بک‌آپ خودکار داده‌ها
 - امکان بازیابی اطلاعات
-نمای عیب‌یابی
+
+
+
+## راهنمای عیب‌یابی
 1. خطای "File not found": اطمینان از وجود پوشه data
 2. خطای "Invalid input": بررسی فرمت ورودی‌ها
 3. خطای "Insufficient balance": شارژ کیف پول

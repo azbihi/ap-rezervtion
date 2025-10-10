@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN
-#include "catch2/catch.hpp"
-#include "../main/AirlineSystem.h"
-#include "../main/InputValidator.h"
+#include ".\catch_amalgamated.hpp"
+#include "..\main\main.h"
 #include <chrono>
+#include <iostream>
 
 TEST_CASE("Passenger Management Tests", "[passenger]") {
     AirlineSystem system;
@@ -131,7 +131,7 @@ TEST_CASE("Refund Policy Tests", "[refund]") {
         system.cancelReservation(reservation_id);
         
         // Should get 90% refund
-        REQUIRE(passenger->getWalletBalance() == Approx(initial_balance + 900.0));
+        REQUIRE(passenger->getWalletBalance() == (initial_balance + 900.0));
     }
 
     SECTION("24-48 Hours Before Flight") {
@@ -165,7 +165,7 @@ TEST_CASE("Input Validation Tests", "[validation]") {
     }
 }
 
-منظTEST_CASE("Report Generation Tests", "[reports]") {
+TEST_CASE("Report Generation Tests", "[reports]") {
     AirlineSystem system;
     time_t future_time = std::time(nullptr) + 24*60*60;
 
@@ -184,4 +184,39 @@ TEST_CASE("Input Validation Tests", "[validation]") {
     SECTION("Generate Filtered Reservations Report") {
         REQUIRE_NOTHROW(system.generateReservationsReport("test_report.csv", true, false, false));
     }
+}
+
+TEST_CASE("All Report Generation", "[reports]") {
+    AirlineSystem system;
+    time_t future_time = std::time(nullptr) + 24*60*60;
+
+    // داده تستی
+    Passenger p("John Doe", "AB123456", "1234567890", "USA");
+    Flight f("AB123", "New York", "London", future_time, 100, 500.0);
+    int passenger_id = system.addPassenger(p);
+    int flight_id = system.addFlight(f);
+    auto passenger = system.findPassenger(passenger_id);
+    passenger->updateWalletBalance(1000.0);
+    int reservation_id = system.makeReservation(passenger_id, flight_id);
+
+    // گزارش پرواز
+    REQUIRE_NOTHROW(system.generateFlightReport(flight_id));
+    // گزارش مسافر
+    REQUIRE_NOTHROW(system.generatePassengerReport(passenger_id));
+    // گزارش همه رزروها
+    REQUIRE_NOTHROW(system.generateReservationReport());
+    // گزارش رزروهای فیلتر شده
+    REQUIRE_NOTHROW(system.generateReservationsReport("filtered_reservations.csv", true, false, false));
+    REQUIRE_NOTHROW(system.generateReservationsReport("filtered_reservations_completed.csv", false, true, false));
+    REQUIRE_NOTHROW(system.generateReservationsReport("filtered_reservations_refunded.csv", false, false, true));
+    // گزارش مسافران یک پرواز
+    REQUIRE_NOTHROW(system.generateFlightPassengersReport("flight_passengers.csv", flight_id));
+    // گزارش پروازهای یک روز خاص
+    REQUIRE_NOTHROW(system.generateFlightsByDateReport("daily_flights.csv", future_time));
+    // گزارش پروازهای آینده
+    REQUIRE_NOTHROW(system.generateFutureFlightsReport("future_flights.csv"));
+    // گزارش سفرهای مسافر
+    REQUIRE_NOTHROW(system.generatePassengerTripsReport("passenger_trips.csv", passenger_id, false, false));
+    REQUIRE_NOTHROW(system.generatePassengerTripsReport("passenger_trips_future.csv", passenger_id, true, false));
+    REQUIRE_NOTHROW(system.generatePassengerTripsReport("passenger_trips_refunded.csv", passenger_id, false, true));
 }

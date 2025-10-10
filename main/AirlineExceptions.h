@@ -8,6 +8,21 @@ public:
         : std::runtime_error(message) {}
 };
 
+class FlightCompletedException : public AirlineException {
+public:
+    FlightCompletedException() : AirlineException("Flight has already departed") {}
+};
+
+class RefundNotAllowedException : public AirlineException {
+public:
+    RefundNotAllowedException() : AirlineException("Refund not allowed within 24 hours of departure") {}
+};
+
+class InsufficientBalanceException : public AirlineException {
+public:
+    InsufficientBalanceException() : AirlineException("Insufficient balance in wallet") {}
+};
+
 class PassengerNotFoundException : public AirlineException {
 public:
     PassengerNotFoundException() : AirlineException("Passenger not found") {}
@@ -18,34 +33,19 @@ public:
     FlightNotFoundException() : AirlineException("Flight not found") {}
 };
 
-class InsufficientBalanceException : public AirlineException {
-public:
-    InsufficientBalanceException() : AirlineException("Insufficient balance") {}
-};
-
-class InvalidInputException : public AirlineException {
-public:
-    explicit InvalidInputException(const std::string& field) 
-        : AirlineException("Invalid input for: " + field) {}
-};
-
-class FileOperationException : public AirlineException {
-public:
-    explicit FileOperationException(const std::string& operation) 
-        : AirlineException("File operation failed: " + operation) {}
-};
-
 class ReservationNotFoundException : public AirlineException {
 public:
     ReservationNotFoundException() : AirlineException("Reservation not found") {}
 };
 
-class FlightCompletedException : public AirlineException {
+class InvalidInputException : public AirlineException {
 public:
-    FlightCompletedException() : AirlineException("Flight is already completed") {}
+    InvalidInputException(const std::string& field) 
+        : AirlineException("Invalid input for field: " + field) {}
 };
 
-class RefundNotAllowedException : public AirlineException {
+class FileOperationException : public AirlineException {
 public:
-    RefundNotAllowedException() : AirlineException("Refund is not allowed due to time constraints") {}
+    FileOperationException(const std::string& message) 
+        : AirlineException("File operation failed: " + message) {}
 };
